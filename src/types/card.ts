@@ -11,8 +11,8 @@ export interface ICard {
     set: {
         id: number;
         name: string;
+        order: number | null;
         riftbound_id: string;
-        tcgplayer_id: string;
     } | null;
 
     // Prices

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_cards/cards/$id")({
                 const { data, error } = await supabase
                     .from("card")
                     .select(
-                        "id, name, collector_number, rich_text, media(image_url), set!inner(id, name, riftbound_id, tcgplayer_id), card_domain!inner(id, domain_ref_id), prices:card_price(blueprint_id, card_market_id, country_code, min_price_cents, avg_price_cents, created_at)",
+                        "id, name, collector_number, rich_text, media(image_url), set!inner(id, name, riftbound_id, order), card_domain!inner(id, domain_ref_id), prices:card_price(blueprint_id, card_market_id, country_code, min_price_cents, avg_price_cents, created_at)",
                     )
                     .eq("id", parseInt(params.id, 10));
                 // Handle errors and return the card data
