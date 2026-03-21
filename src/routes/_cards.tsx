@@ -17,6 +17,8 @@ interface IParams {
     search: string;
     sets: number[];
     domains: number[];
+    rarities: number[];
+    types: number[];
 }
 
 export const Route = createFileRoute("/_cards")({
@@ -30,6 +32,8 @@ function Index() {
         search: "",
         sets: [] as number[],
         domains: [] as number[],
+        rarities: [] as number[],
+        types: [] as number[],
     });
 
     // Fetch cards with Tanstack Query
@@ -39,9 +43,9 @@ function Index() {
             const query = supabase
                 .from("card")
                 .select(
-                    "id, name, collector_number, rich_text, media(image_url), set!inner(id, name, riftbound_id, tcgplayer_id), card_domain!inner(id, domain_ref_id), prices:card_price(blueprint_id, card_market_id, country_code, min_price_cents, avg_price_cents, created_at)",
+                    "id, name, collector_number, rich_text, media(image_url), set!inner(id, name, order, riftbound_id), card_domain!inner(id, domain_ref_id), prices:card_price(blueprint_id, card_market_id, country_code, min_price_cents, avg_price_cents, created_at)",
                 )
-                .order("set(tcgplayer_id)", { ascending: true })
+                .order("set(order)", { ascending: true })
                 .order("collector_number", { ascending: true })
                 .range(params.skip, params.skip + LIMIT - 1);
 
@@ -53,6 +57,8 @@ function Index() {
             }
             if (params.sets && params.sets.length > 0) query.in("set.id", params.sets);
             if (params.domains && params.domains.length > 0) query.in("card_domain.domain_ref_id", params.domains);
+            if (params.rarities && params.rarities.length > 0) query.in("rarity_ref_id", params.rarities);
+            if (params.types && params.types.length > 0) query.in("type_ref_id", params.types);
 
             const { data, error } = await query;
             if (error) throw error;
@@ -170,8 +176,8 @@ function Index() {
                         onClose={() => setToggleFilter(false)}
                     >
                         <ModalContent>
-                            <ModalBody className="px-3 py-6">
-                                <CardFilters onSubmit={handleUpdateParams} />
+                            <ModalBody className="px-2 py-6">
+                                <CardFilters values={params} onSubmit={handleUpdateParams} />
                             </ModalBody>
                         </ModalContent>
                     </Modal>

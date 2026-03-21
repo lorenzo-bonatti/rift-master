@@ -241,16 +241,19 @@ export type Database = {
           code: string
           created_at: string
           id: number
+          order: number | null
         }
         Insert: {
           code: string
           created_at?: string
           id?: number
+          order?: number | null
         }
         Update: {
           code?: string
           created_at?: string
           id?: number
+          order?: number | null
         }
         Relationships: []
       }
@@ -328,16 +331,19 @@ export type Database = {
           code: string
           created_at: string
           id: number
+          order: number | null
         }
         Insert: {
           code: string
           created_at?: string
           id?: number
+          order?: number | null
         }
         Update: {
           code?: string
           created_at?: string
           id?: number
+          order?: number | null
         }
         Relationships: []
       }
@@ -349,6 +355,7 @@ export type Database = {
           id: number
           label: string | null
           name: string
+          order: number | null
           publish_date: string | null
           riftbound_id: string
           tcgplayer_id: string
@@ -361,6 +368,7 @@ export type Database = {
           id?: number
           label?: string | null
           name: string
+          order?: number | null
           publish_date?: string | null
           riftbound_id: string
           tcgplayer_id: string
@@ -373,6 +381,7 @@ export type Database = {
           id?: number
           label?: string | null
           name?: string
+          order?: number | null
           publish_date?: string | null
           riftbound_id?: string
           tcgplayer_id?: string
@@ -421,16 +430,19 @@ export type Database = {
           code: string
           created_at: string
           id: number
+          order: number | null
         }
         Insert: {
           code: string
           created_at?: string
           id?: number
+          order?: number | null
         }
         Update: {
           code?: string
           created_at?: string
           id?: number
+          order?: number | null
         }
         Relationships: []
       }
