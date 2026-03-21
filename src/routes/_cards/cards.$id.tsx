@@ -42,7 +42,7 @@ function RouteComponent() {
                     </h1>
                 </ModalHeader>
                 <ModalBody className="px-2">
-                    <div className="w-full aspect-2/3">
+                    <div className="w-full aspect-[2/2.8]">
                         <Image
                             alt={card.name}
                             src={card.media?.image_url || "https://via.placeholder.com/150"}

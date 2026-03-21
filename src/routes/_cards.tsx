@@ -94,11 +94,11 @@ function Index() {
                 </p>
             }
         >
-            <div className="page bg-content1 space-y-4">
-                <div className="page-header p-2">
+            <div className="page space-y-4">
+                <div className="page-header py-2 px-4">
                     <div className="flex justify-between items-center mb-2">
-                        <h1 className="text-xl font-bold">Cards</h1>
-                        <Button isIconOnly onPress={() => setToggleFilter(true)}>
+                        <h1 className="text-2xl font-bold">Cards</h1>
+                        <Button variant="light" isIconOnly onPress={() => setToggleFilter(true)}>
                             <i className="fa fa-filter" />
                         </Button>
                     </div>
@@ -130,10 +130,14 @@ function Index() {
                                         // Pass the card data in the history state to avoid refetching in the detail view
                                         state={{ card }}
                                     >
-                                        <div className="w-full aspect-2/3">
+                                        {/* TODO: change aspect ratio for horizontal image (check metadata)*/}
+                                        <div className="w-full aspect-[2/2.8]">
                                             <Image
                                                 alt={card.name}
-                                                src={card.media?.image_url || "https://via.placeholder.com/150"}
+                                                src={
+                                                    card.media?.image_url ||
+                                                    "https://placehold.co/744x1039?text=No+Image"
+                                                }
                                                 // width={340}
                                                 // height={510}
                                                 className="w-full h-full object-cover rounded"
