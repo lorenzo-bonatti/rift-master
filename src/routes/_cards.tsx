@@ -1,10 +1,11 @@
-import { Button, Image, Input, Modal, ModalBody, ModalContent, Spinner } from "@heroui/react";
+import { Button, Image, Input, Modal, ModalBody, ModalContent, Skeleton, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDebouncedCallback } from "use-debounce";
 import { CardFilters } from "../components/card-filters";
+import { ImageWithSkeleton } from "../components/image-with-skeleton";
 import { supabase } from "../integration/supabase";
 import type { ICard } from "../types/card";
 import { splitCardName } from "../utils/cards";
@@ -132,15 +133,10 @@ function Index() {
                                     >
                                         {/* TODO: change aspect ratio for horizontal image (check metadata)*/}
                                         <div className="w-full aspect-[2/2.8]">
-                                            <Image
-                                                alt={card.name}
-                                                src={
-                                                    card.media?.image_url ||
-                                                    "https://placehold.co/744x1039?text=No+Image"
-                                                }
-                                                // width={340}
-                                                // height={510}
-                                                className="w-full h-full object-cover rounded"
+                                            <ImageWithSkeleton
+                                                name={card.name}
+                                                src={card.media?.image_url ?? "no-src"}
+                                                loading="lazy"
                                             />
                                         </div>
 
@@ -174,7 +170,7 @@ function Index() {
                         onClose={() => setToggleFilter(false)}
                     >
                         <ModalContent>
-                            <ModalBody className="px-2">
+                            <ModalBody className="px-3 py-6">
                                 <CardFilters onSubmit={handleUpdateParams} />
                             </ModalBody>
                         </ModalContent>

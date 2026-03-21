@@ -1,5 +1,6 @@
 import { Image, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import { ImageWithSkeleton } from "../../components/image-with-skeleton";
 import { PricePanel } from "../../components/price-panel";
 import { supabase } from "../../integration/supabase";
 import type { ICard } from "../../types/card";
@@ -43,13 +44,7 @@ function RouteComponent() {
                 </ModalHeader>
                 <ModalBody className="px-2">
                     <div className="w-full aspect-[2/2.8]">
-                        <Image
-                            alt={card.name}
-                            src={card.media?.image_url || "https://via.placeholder.com/150"}
-                            // width={340}
-                            // height={510}
-                            className="w-full h-full object-cover rounded"
-                        />
+                        <ImageWithSkeleton name={card.name} src={card.media?.image_url ?? "no-src"} loading="eager" />
                     </div>
 
                     <div

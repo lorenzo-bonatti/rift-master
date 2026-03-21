@@ -49,6 +49,7 @@ export const CardFilters = ({ onSubmit }: IProps) => {
 
     return (
         <form
+            className="space-y-4"
             onSubmit={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -58,8 +59,8 @@ export const CardFilters = ({ onSubmit }: IProps) => {
             <Field name="domains">
                 {(field) => (
                     <div>
-                        <h3>Domains</h3>
-                        <div className="flex flex-wrap gap-2">
+                        <h3 className="text-sm font-gray-500 font-semibold uppercase mb-1">Domains</h3>
+                        <div className="flex flex-wrap gap-1">
                             {domains?.map((set) => (
                                 <Chip
                                     key={set.id}
@@ -69,7 +70,7 @@ export const CardFilters = ({ onSubmit }: IProps) => {
                                         <img
                                             src={`/domains/${set.code.toLocaleLowerCase()}.png`}
                                             alt={set.code}
-                                            className="w-6 h-6 object-cover"
+                                            className="w-5 h-5 object-cover"
                                         />
                                     }
                                     onClick={() => {
@@ -88,8 +89,8 @@ export const CardFilters = ({ onSubmit }: IProps) => {
             <Field name="sets">
                 {(field) => (
                     <div>
-                        <h3>Sets</h3>
-                        <div className="flex gap-2">
+                        <h3 className="text-sm font-gray-500 font-semibold uppercase mb-1">Sets</h3>
+                        <div className="flex flex-wrap gap-1">
                             {sets?.map((set) => (
                                 <Chip
                                     key={set.id}
@@ -111,8 +112,8 @@ export const CardFilters = ({ onSubmit }: IProps) => {
             <Field name="rarities">
                 {(field) => (
                     <div>
-                        <h3>Rarity</h3>
-                        <div className="flex gap-2">
+                        <h3 className="text-sm font-gray-500 font-semibold uppercase mb-1">Rarity</h3>
+                        <div className="flex flex-wrap gap-1">
                             {rarities?.map((set) => (
                                 <Chip
                                     key={set.id}
