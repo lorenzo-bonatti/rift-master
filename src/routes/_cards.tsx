@@ -1,4 +1,4 @@
-import { Button, Image, Input, Modal, ModalBody, ModalContent, Skeleton, Spinner } from "@heroui/react";
+import { Badge, Button, Image, Input, Modal, ModalBody, ModalContent, Skeleton, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
@@ -81,6 +81,8 @@ function Index() {
 
     // Filters
     const [toggleFilter, setToggleFilter] = useState(false);
+    const filtersCount = [...params.sets, ...params.domains, ...params.rarities, ...params.types].length;
+
     const handleUpdateParams = useDebouncedCallback((params: Partial<IParams>) => {
         setParams((prev) => ({ ...prev, ...params, skip: 0 }));
     }, 350);
@@ -105,9 +107,11 @@ function Index() {
                 <div className="page-header py-2 px-4">
                     <div className="flex justify-between items-center mb-2">
                         <h1 className="text-2xl font-bold">Cards</h1>
-                        <Button variant="light" isIconOnly onPress={() => setToggleFilter(true)}>
-                            <i className="fa fa-filter" />
-                        </Button>
+                        <Badge color="secondary" content={filtersCount > 0 ? filtersCount : undefined} size="sm">
+                            <Button variant="ghost" isIconOnly onPress={() => setToggleFilter(true)}>
+                                <i className="fa fa-filter" />
+                            </Button>
+                        </Badge>
                     </div>
 
                     <Input
