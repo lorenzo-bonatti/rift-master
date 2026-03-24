@@ -8,7 +8,7 @@ import { CardFilters } from "../components/card-filters";
 import { ImageWithSkeleton } from "../components/image-with-skeleton";
 import { supabase } from "../integration/supabase";
 import type { ICard } from "../types/card";
-import { splitCardName } from "../utils/cards";
+import { getCardSetNumber, splitCardName } from "../utils/cards";
 
 const LIMIT = 50;
 
@@ -42,19 +42,13 @@ function Index() {
         queryFn: async () => {
             const query = supabase
                 .from("card")
-                .select(
-                    "id, name, collector_number, rich_text, media(image_url), set!inner(id, name, order, riftbound_id), card_domain!inner(id, domain_ref_id), prices:card_price(blueprint_id, card_market_id, country_code, min_price_cents, avg_price_cents, created_at)",
-                )
+                .select("id, name, collector_number, public_code, media(image_url), set!inner(order)")
                 .order("set(order)", { ascending: true })
                 .order("collector_number", { ascending: true })
                 .range(params.skip, params.skip + LIMIT - 1);
 
             // Apply filters
-            if (params.search) {
-                const collectorQuery = null as string | null;
-                if (!Number.isNaN(Number(params.search))) `collector_number.eq.${parseInt(params.search, 10)}`;
-                query.or(`name.ilike.%${params.search}%${collectorQuery ? `,${collectorQuery}` : ""}`);
-            }
+            if (params.search) query.or(`name.ilike.%${params.search}%,public_code.ilike.%${params.search}%`);
             if (params.sets && params.sets.length > 0) query.in("set.id", params.sets);
             if (params.domains && params.domains.length > 0) query.in("card_domain.domain_ref_id", params.domains);
             if (params.rarities && params.rarities.length > 0) query.in("rarity_ref_id", params.rarities);
@@ -132,40 +126,44 @@ function Index() {
                     ) : (
                         <div className="grid grid-cols-3 gap-2">
                             {cards && cards.length > 0 ? (
-                                cards.map((card) => (
-                                    <Link
-                                        to="/cards/$id"
-                                        key={card.id}
-                                        params={{ id: String(card.id) }}
-                                        className="space-y-1"
-                                        // Pass the card data in the history state to avoid refetching in the detail view
-                                        state={{ card }}
-                                    >
-                                        {/* TODO: change aspect ratio for horizontal image (check metadata)*/}
-                                        <div className="w-full aspect-[2/2.8]">
-                                            <ImageWithSkeleton
-                                                name={card.name}
-                                                src={card.media?.image_url ?? "no-src"}
-                                                loading="lazy"
-                                            />
-                                        </div>
-
-                                        <div className="flex gap-1 text-sm/4 px-1">
-                                            <div>
-                                                <p>{card.set?.riftbound_id}</p>
-                                                <p>{card.collector_number?.toString().padStart(3, "0")}</p>
+                                cards.map((card) => {
+                                    const { set, number } = getCardSetNumber(card.public_code ?? "") ?? {
+                                        set: "N/A",
+                                        number: "N/A",
+                                    };
+                                    return (
+                                        <Link
+                                            to="/cards/$id"
+                                            key={card.id}
+                                            params={{ id: String(card.id) }}
+                                            className="space-y-1"
+                                        >
+                                            {/* TODO: change aspect ratio for horizontal image (check metadata)*/}
+                                            <div className="w-full aspect-[2/2.8]">
+                                                <ImageWithSkeleton
+                                                    name={card.name}
+                                                    src={card.media?.image_url ?? "no-src"}
+                                                    loading="lazy"
+                                                />
                                             </div>
 
-                                            <div className="grow overflow-hidden">
-                                                {splitCardName(card.name).map((word) => (
-                                                    <p key={`${card.id}-${word}`} className="truncate">
-                                                        {word}
-                                                    </p>
-                                                ))}
+                                            <div className="flex gap-1 text-sm/4 px-1">
+                                                <div>
+                                                    <p>{set}</p>
+                                                    <p>{number}</p>
+                                                </div>
+
+                                                <div className="grow overflow-hidden">
+                                                    {splitCardName(card.name).map((word) => (
+                                                        <p key={`${card.id}-${word}`} className="truncate">
+                                                            {word}
+                                                        </p>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Link>
-                                ))
+                                        </Link>
+                                    );
+                                })
                             ) : (
                                 <p className="text-center py-12 text-gray-500">No cards found</p>
                             )}
