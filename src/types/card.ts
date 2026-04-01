@@ -17,3 +17,22 @@ export interface ICard {
     // Prices
     prices?: IPrice[];
 }
+
+export interface ICardDetail extends ICard {
+    energy: number | null;
+    power: number | null;
+    might: number | null;
+
+    rarity: {
+        code: string;
+    } | null;
+    type: {
+        code: string;
+    } | null;
+    supertype: {
+        code: string;
+    } | null;
+
+    card_domain: { domain: { code: string } }[];
+    card_tag: { tag: { code: string } }[];
+}
