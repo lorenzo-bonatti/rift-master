@@ -4,18 +4,18 @@ import { persist } from "zustand/middleware";
 import { name } from "../../package.json";
 
 interface IState {
-    language: string;
+    priceCountry: string;
 }
 
 interface IActions {
-    setLanguage: (language: string) => void;
+    setPriceCountry: (country: string) => void;
 }
 
 export const useSettingsStore = create<IState & IActions>()(
     persist(
         (set) => ({
-            language: "it",
-            setLanguage: (language: string) => set({ language }),
+            priceCountry: "it",
+            setPriceCountry: (country: string) => set({ priceCountry: country }),
         }),
         { name: `${name}-settings`, version: 1 },
     ),
