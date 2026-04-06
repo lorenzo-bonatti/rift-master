@@ -1,4 +1,15 @@
-import { Badge, Button, Image, Input, Modal, ModalBody, ModalContent, Skeleton, Spinner } from "@heroui/react";
+import {
+    Badge,
+    Button,
+    Image,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalHeader,
+    Skeleton,
+    Spinner,
+} from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
@@ -178,7 +189,8 @@ function Index() {
                         onClose={() => setToggleFilter(false)}
                     >
                         <ModalContent>
-                            <ModalBody className="px-2 py-6">
+                            <ModalHeader>Filter search</ModalHeader>
+                            <ModalBody>
                                 <CardFilters values={params} onSubmit={handleUpdateParams} />
                             </ModalBody>
                         </ModalContent>

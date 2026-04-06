@@ -28,7 +28,7 @@ interface IProps {
 export const CardFilters = ({ values, onSubmit }: IProps) => {
     const { data: sets } = useQuery({
         queryKey: ["sets"],
-        queryFn: async () => await supabase.from("set").select("id, name, order").order("order", { ascending: true }),
+        queryFn: async () => await supabase.from("set").select("id, label, order").order("order", { ascending: true }),
         select: (res) => res.data ?? [],
     });
 
@@ -80,25 +80,26 @@ export const CardFilters = ({ values, onSubmit }: IProps) => {
                 {(field) => (
                     <div>
                         <h3 className="text-sm font-gray-500 font-semibold uppercase px-1 mb-2">Domains</h3>
-                        <div className="flex flex-wrap gap-1">
-                            {domains?.map((set) => (
+                        <div className="grid grid-cols-3 gap-2">
+                            {domains?.map((domain) => (
                                 <Chip
-                                    key={set.id}
+                                    key={domain.id}
                                     variant="flat"
-                                    color={field.state.value.includes(set.id) ? "primary" : "default"}
+                                    color={field.state.value.includes(domain.id) ? "primary" : "default"}
                                     startContent={
                                         <img
-                                            src={`/domains/${set.code.toLocaleLowerCase()}.png`}
-                                            alt={set.code}
+                                            src={`/domains/${domain.code.toLocaleLowerCase()}.png`}
+                                            alt={domain.code}
                                             className="w-5 h-5 object-cover"
                                         />
                                     }
                                     onClick={() => {
-                                        field.handleChange(toggleValueInArray(field.state.value, set.id));
+                                        field.handleChange(toggleValueInArray(field.state.value, domain.id));
                                         void form.handleSubmit();
                                     }}
+                                    className="max-w-full pl-2"
                                 >
-                                    {set.code}
+                                    {domain.code}
                                 </Chip>
                             ))}
                         </div>
@@ -110,7 +111,7 @@ export const CardFilters = ({ values, onSubmit }: IProps) => {
                 {(field) => (
                     <div>
                         <h3 className="text-sm font-gray-500 font-semibold uppercase px-1 mb-2">Sets</h3>
-                        <div className="flex flex-wrap grid-flow-row-dense gap-1">
+                        <div className="grid grid-cols-2 gap-2">
                             {sets?.map((set) => (
                                 <Chip
                                     key={set.id}
@@ -120,8 +121,9 @@ export const CardFilters = ({ values, onSubmit }: IProps) => {
                                         field.handleChange(toggleValueInArray(field.state.value, set.id));
                                         void form.handleSubmit();
                                     }}
+                                    className="max-w-full pl-2"
                                 >
-                                    {set.name}
+                                    {set.label}
                                 </Chip>
                             ))}
                         </div>
@@ -133,18 +135,26 @@ export const CardFilters = ({ values, onSubmit }: IProps) => {
                 {(field) => (
                     <div>
                         <h3 className="text-sm font-gray-500 font-semibold uppercase px-1 mb-2">Rarity</h3>
-                        <div className="flex flex-wrap grid-flow-row-dense gap-1">
-                            {rarities?.map((set) => (
+                        <div className="grid grid-cols-3 grid-flow-row-dense gap-1">
+                            {rarities?.map((rarity) => (
                                 <Chip
-                                    key={set.id}
+                                    key={rarity.id}
                                     variant="flat"
-                                    color={field.state.value.includes(set.id) ? "primary" : "default"}
+                                    color={field.state.value.includes(rarity.id) ? "primary" : "default"}
+                                    startContent={
+                                        <img
+                                            src={`/rarities/${rarity.code.toLocaleLowerCase()}.png`}
+                                            alt={rarity.code}
+                                            className="w-4 h-4 object-cover"
+                                        />
+                                    }
                                     onClick={() => {
-                                        field.handleChange(toggleValueInArray(field.state.value, set.id));
+                                        field.handleChange(toggleValueInArray(field.state.value, rarity.id));
                                         void form.handleSubmit();
                                     }}
+                                    className="max-w-full pl-2"
                                 >
-                                    {set.code}
+                                    {rarity.code}
                                 </Chip>
                             ))}
                         </div>
@@ -156,18 +166,19 @@ export const CardFilters = ({ values, onSubmit }: IProps) => {
                 {(field) => (
                     <div>
                         <h3 className="text-sm font-gray-500 font-semibold uppercase px-1 mb-2">Type</h3>
-                        <div className="flex flex-wrap grid-flow-row-dense gap-1">
-                            {types?.map((set) => (
+                        <div className="grid grid-cols-3 grid-flow-row-dense gap-1">
+                            {types?.map((type) => (
                                 <Chip
-                                    key={set.id}
+                                    key={type.id}
                                     variant="flat"
-                                    color={field.state.value.includes(set.id) ? "primary" : "default"}
+                                    color={field.state.value.includes(type.id) ? "primary" : "default"}
                                     onClick={() => {
-                                        field.handleChange(toggleValueInArray(field.state.value, set.id));
+                                        field.handleChange(toggleValueInArray(field.state.value, type.id));
                                         void form.handleSubmit();
                                     }}
+                                    className="max-w-full pl-2"
                                 >
-                                    {set.code}
+                                    {type.code}
                                 </Chip>
                             ))}
                         </div>
