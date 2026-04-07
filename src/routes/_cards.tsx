@@ -58,6 +58,7 @@ function Index() {
                   collector_number,
                   public_code,
                   media(image_url),
+                  orientation,
                   set!inner(order),
                   card_domain!inner(domain_ref_id)
                 `)
@@ -176,11 +177,11 @@ function Index() {
                                             params={{ id: String(card.id) }}
                                             className="space-y-1"
                                         >
-                                            {/* TODO: change aspect ratio for horizontal image (check metadata)*/}
-                                            <div className="w-full aspect-[2/2.8]">
+                                            <div className="w-full aspect-[2/2.8] relative overflow-hidden rounded">
                                                 <ImageWithSkeleton
                                                     name={card.name}
                                                     src={card.media?.image_url ?? "no-src"}
+                                                    orientation={card.orientation ?? null}
                                                     loading="lazy"
                                                 />
                                             </div>

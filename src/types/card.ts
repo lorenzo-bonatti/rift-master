@@ -9,6 +9,7 @@ export interface ICard {
     media: {
         image_url: string | null;
     } | null;
+    orientation?: string | null;
 
     set?: {
         order: number | null;

@@ -25,6 +25,7 @@ export const Route = createFileRoute("/_cards/cards/$id")({
                       supertype(code),
                       rich_text,
                       media(image_url),
+                      orientation,
                       card_domain(domain(code)),
                       card_tag(tag(code)),
                       prices:card_price(
@@ -58,10 +59,11 @@ function RouteComponent() {
                 </ModalHeader>
                 <ModalBody className="px-2">
                     <div className="flex gap-2">
-                        <div className="w-3/4 shrink-0 aspect-[2/2.8]">
+                        <div className="w-3/4 shrink-0 aspect-[2/2.8] relative overflow-hidden rounded">
                             <ImageWithSkeleton
                                 name={card.name}
                                 src={card.media?.image_url ?? "no-src"}
+                                orientation={card.orientation ?? null}
                                 loading="eager"
                             />
                         </div>
