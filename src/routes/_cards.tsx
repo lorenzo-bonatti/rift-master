@@ -1,35 +1,31 @@
-import {
-    Badge,
-    Button,
-    Image,
-    Input,
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalHeader,
-    Skeleton,
-    Spinner,
-} from "@heroui/react";
+import { Badge, Button, Input, Modal, ModalBody, ModalContent, ModalHeader, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDebouncedCallback } from "use-debounce";
 import { CardFilters } from "../components/card-filters";
+import { CardSort } from "../components/card-sort";
 import { ImageWithSkeleton } from "../components/image-with-skeleton";
 import { supabase } from "../integration/supabase";
 import type { ICard } from "../types/card";
+import { EnumSort } from "../types/card-page";
 import { getCardSetNumber, splitCardName } from "../utils/cards";
 
 const LIMIT = 50;
 
 interface IParams {
     skip: number;
+    // Filter options
     search: string;
     sets: number[];
     domains: number[];
     rarities: number[];
     types: number[];
+    // Sort options
+    sort: EnumSort;
+    sortDirection: "asc" | "desc";
+    enableSetSort: boolean;
 }
 
 export const Route = createFileRoute("/_cards")({
@@ -45,6 +41,9 @@ function Index() {
         domains: [] as number[],
         rarities: [] as number[],
         types: [] as number[],
+        sort: EnumSort.NUMBER,
+        sortDirection: "asc",
+        enableSetSort: true,
     });
 
     // Fetch cards with Tanstack Query
@@ -53,10 +52,29 @@ function Index() {
         queryFn: async () => {
             const query = supabase
                 .from("card")
-                .select("id, name, collector_number, public_code, media(image_url), set!inner(order)")
-                .order("set(order)", { ascending: true })
-                .order("collector_number", { ascending: true })
+                .select(`
+                  id,
+                  name,
+                  collector_number,
+                  public_code,
+                  media(image_url),
+                  set!inner(order),
+                  card_domain!inner(domain_ref_id)
+                `)
                 .range(params.skip, params.skip + LIMIT - 1);
+
+            // Apply sorting for set, then by selected sort
+            if (params.enableSetSort) query.order("set(order)", { ascending: true });
+
+            const sort = params.sort;
+            const ascending = params.sortDirection === "asc";
+
+            if (sort === EnumSort.NAME) query.order("name", { ascending });
+            else if (sort === EnumSort.NUMBER) query.order("collector_number", { ascending });
+            else if (sort === EnumSort.MIGHT) query.order("might", { ascending });
+            else if (sort === EnumSort.ENERGY) query.order("energy", { ascending });
+            else if (sort === EnumSort.POWER) query.order("power", { ascending });
+            // else if (sort === EnumSort.PRICE) query.order("price", { ascending: sortDirection === "asc" });
 
             // Apply filters
             if (params.search) query.or(`name.ilike.%${params.search}%,public_code.ilike.%${params.search}%`);
@@ -88,6 +106,9 @@ function Index() {
     const [toggleFilter, setToggleFilter] = useState(false);
     const filtersCount = [...params.sets, ...params.domains, ...params.rarities, ...params.types].length;
 
+    // Sort
+    const [toggleSort, setToggleSort] = useState(false);
+
     const handleUpdateParams = useDebouncedCallback((params: Partial<IParams>) => {
         setParams((prev) => ({ ...prev, ...params, skip: 0 }));
     }, 350);
@@ -112,11 +133,17 @@ function Index() {
                 <div className="page-header py-2 px-4">
                     <div className="flex justify-between items-center mb-2">
                         <h1 className="text-2xl font-bold">Cards</h1>
-                        <Badge color="secondary" content={filtersCount > 0 ? filtersCount : undefined} size="sm">
-                            <Button variant="ghost" isIconOnly onPress={() => setToggleFilter(true)}>
-                                <i className="fa fa-filter" />
+
+                        <div className="space-x-1">
+                            <Button variant="ghost" isIconOnly onPress={() => setToggleSort(true)}>
+                                <i className="fa fa-arrow-down-a-z" />
                             </Button>
-                        </Badge>
+                            <Badge color="secondary" isInvisible={filtersCount === 0} content={filtersCount} size="sm">
+                                <Button variant="ghost" isIconOnly onPress={() => setToggleFilter(true)}>
+                                    <i className="fa fa-filter" />
+                                </Button>
+                            </Badge>
+                        </div>
                     </div>
 
                     <Input
@@ -190,8 +217,24 @@ function Index() {
                     >
                         <ModalContent>
                             <ModalHeader>Filter search</ModalHeader>
-                            <ModalBody>
+                            <ModalBody className="pb-8">
                                 <CardFilters values={params} onSubmit={handleUpdateParams} />
+                            </ModalBody>
+                        </ModalContent>
+                    </Modal>
+
+                    {/* Sort Panel */}
+                    <Modal
+                        size="xs"
+                        backdrop="opaque"
+                        placement="bottom"
+                        isOpen={toggleSort}
+                        onClose={() => setToggleSort(false)}
+                    >
+                        <ModalContent>
+                            <ModalHeader>Sort cards</ModalHeader>
+                            <ModalBody className="pb-8">
+                                <CardSort value={params} onChange={handleUpdateParams} />
                             </ModalBody>
                         </ModalContent>
                     </Modal>
