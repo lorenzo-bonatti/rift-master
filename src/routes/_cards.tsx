@@ -1,6 +1,6 @@
 import { Badge, Button, Input, Modal, ModalBody, ModalContent, ModalHeader, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDebouncedCallback } from "use-debounce";
