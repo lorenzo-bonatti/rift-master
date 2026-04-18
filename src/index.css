@@ -11,7 +11,7 @@
 
 @layer components {
     .page {
-        @apply min-h-screen flex flex-col;
+        @apply min-h-screen flex flex-col pb-16;
     }
 
     .page-content {

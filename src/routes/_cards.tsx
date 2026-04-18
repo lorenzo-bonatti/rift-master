@@ -1,6 +1,6 @@
 import { Badge, Button, Image, Input, Modal, ModalBody, ModalContent, Skeleton, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDebouncedCallback } from "use-debounce";
@@ -23,6 +23,9 @@ interface IParams {
 
 export const Route = createFileRoute("/_cards")({
     component: Index,
+    beforeLoad: ({ context }) => {
+        if (!context.user) throw redirect({ to: "/login" });
+    },
 });
 
 function Index() {

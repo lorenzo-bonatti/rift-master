@@ -9,10 +9,34 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as CardsRouteImport } from './routes/_cards'
 import { Route as CardsIndexRouteImport } from './routes/_cards/index'
 import { Route as CardsCardsIdRouteImport } from './routes/_cards/cards.$id'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CardsRoute = CardsRouteImport.update({
   id: '/_cards',
   getParentRoute: () => rootRouteImport,
@@ -30,32 +54,96 @@ const CardsCardsIdRoute = CardsCardsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof CardsIndexRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/cards/$id': typeof CardsCardsIdRoute
 }
 export interface FileRoutesByTo {
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/': typeof CardsIndexRoute
   '/cards/$id': typeof CardsCardsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_cards': typeof CardsRouteWithChildren
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/_cards/': typeof CardsIndexRoute
   '/_cards/cards/$id': typeof CardsCardsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cards/$id'
+  fullPaths:
+    | '/'
+    | '/library'
+    | '/login'
+    | '/profile'
+    | '/reset-password'
+    | '/cards/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cards/$id'
-  id: '__root__' | '/_cards' | '/_cards/' | '/_cards/cards/$id'
+  to:
+    | '/library'
+    | '/login'
+    | '/profile'
+    | '/reset-password'
+    | '/'
+    | '/cards/$id'
+  id:
+    | '__root__'
+    | '/_cards'
+    | '/library'
+    | '/login'
+    | '/profile'
+    | '/reset-password'
+    | '/_cards/'
+    | '/_cards/cards/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   CardsRoute: typeof CardsRouteWithChildren
+  LibraryRoute: typeof LibraryRoute
+  LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_cards': {
       id: '/_cards'
       path: ''
@@ -94,6 +182,10 @@ const CardsRouteWithChildren = CardsRoute._addFileChildren(CardsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   CardsRoute: CardsRouteWithChildren,
+  LibraryRoute: LibraryRoute,
+  LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

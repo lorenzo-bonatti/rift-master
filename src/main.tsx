@@ -7,7 +7,7 @@ import { routeTree } from "./routeTree.gen";
 import "./index.css";
 import type { ICard } from "./types/card";
 
-const router = createRouter({ routeTree, context: { queryClient } });
+const router = createRouter({ routeTree, context: { queryClient, user: null } });
 
 declare module "@tanstack/react-router" {
     interface Register {
