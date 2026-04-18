@@ -33,7 +33,8 @@
         "react-intersection-observer": "^10.0.3",
         "tailwindcss": "^4.2.1",
         "use-debounce": "^10.1.0",
-        "zod": "^4.3.6"
+        "zod": "^4.3.6",
+        "zustand": "^5.0.12"
     },
     "devDependencies": {
         "@biomejs/biome": "^2.4.3",
