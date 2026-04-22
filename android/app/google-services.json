@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "330853650600",
+    "project_id": "riftmaster-bc50c",
+    "storage_bucket": "riftmaster-bc50c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330853650600:android:7226dcec8310a68f10b29d",
+        "android_client_info": {
+          "package_name": "com.rift_master.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeDoRPviW1VfEo4Em3BXCZVBSrN8PGeQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

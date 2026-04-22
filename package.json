@@ -15,6 +15,8 @@
         "cap:open": "bunx cap open android"
     },
     "dependencies": {
+        "@capacitor-community/camera-preview": "^8.0.0",
+        "@capacitor-community/image-to-text": "^8.0.0",
         "@capacitor/android": "^8.2.0",
         "@capacitor/app": "^8.0.1",
         "@capacitor/core": "^8.2.0",

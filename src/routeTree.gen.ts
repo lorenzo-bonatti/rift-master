@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OcrRouteImport } from './routes/ocr'
 import { Route as CardsRouteImport } from './routes/_cards'
 import { Route as CardsIndexRouteImport } from './routes/_cards/index'
 import { Route as CardsCardsIdRouteImport } from './routes/_cards/cards.$id'
 
+const OcrRoute = OcrRouteImport.update({
+  id: '/ocr',
+  path: '/ocr',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CardsRoute = CardsRouteImport.update({
   id: '/_cards',
   getParentRoute: () => rootRouteImport,
@@ -30,32 +36,43 @@ const CardsCardsIdRoute = CardsCardsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof CardsIndexRoute
+  '/ocr': typeof OcrRoute
   '/cards/$id': typeof CardsCardsIdRoute
 }
 export interface FileRoutesByTo {
+  '/ocr': typeof OcrRoute
   '/': typeof CardsIndexRoute
   '/cards/$id': typeof CardsCardsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_cards': typeof CardsRouteWithChildren
+  '/ocr': typeof OcrRoute
   '/_cards/': typeof CardsIndexRoute
   '/_cards/cards/$id': typeof CardsCardsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cards/$id'
+  fullPaths: '/' | '/ocr' | '/cards/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cards/$id'
-  id: '__root__' | '/_cards' | '/_cards/' | '/_cards/cards/$id'
+  to: '/ocr' | '/' | '/cards/$id'
+  id: '__root__' | '/_cards' | '/ocr' | '/_cards/' | '/_cards/cards/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   CardsRoute: typeof CardsRouteWithChildren
+  OcrRoute: typeof OcrRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/ocr': {
+      id: '/ocr'
+      path: '/ocr'
+      fullPath: '/ocr'
+      preLoaderRoute: typeof OcrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_cards': {
       id: '/_cards'
       path: ''
@@ -94,6 +111,7 @@ const CardsRouteWithChildren = CardsRoute._addFileChildren(CardsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   CardsRoute: CardsRouteWithChildren,
+  OcrRoute: OcrRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
