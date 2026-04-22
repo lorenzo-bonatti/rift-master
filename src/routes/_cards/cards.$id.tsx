@@ -1,6 +1,6 @@
 import { Card, CardBody, Chip, Divider, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
-import { ImageWithSkeleton } from "../../components/image-with-skeleton";
+import { CardImage } from "../../components/card-image";
 import { PricePanel } from "../../components/price-panel";
 import { supabase } from "../../integration/supabase";
 import type { ICardDetail } from "../../types/card";
@@ -59,14 +59,7 @@ function RouteComponent() {
                 </ModalHeader>
                 <ModalBody className="px-2">
                     <div className="flex gap-2">
-                        <div className="w-3/4 shrink-0 aspect-[2/2.8] relative overflow-hidden rounded">
-                            <ImageWithSkeleton
-                                name={card.name}
-                                src={card.media?.image_url ?? "no-src"}
-                                orientation={card.orientation ?? null}
-                                loading="eager"
-                            />
-                        </div>
+                        <CardImage card={card} className="w-3/4" />
                         <Card shadow="none" className="grow border border-gray-300">
                             <CardBody className="grid grid-cols-1 text-center items-center">
                                 <div>

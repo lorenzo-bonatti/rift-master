@@ -1,12 +1,12 @@
 import { Badge, Button, Input, Modal, ModalBody, ModalContent, ModalHeader, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDebouncedCallback } from "use-debounce";
 import { CardFilters } from "../components/card-filters";
+import { CardImage } from "../components/card-image";
 import { CardSort } from "../components/card-sort";
-import { ImageWithSkeleton } from "../components/image-with-skeleton";
 import { supabase } from "../integration/supabase";
 import type { ICard } from "../types/card";
 import { EnumSort } from "../types/card-page";
@@ -33,6 +33,8 @@ export const Route = createFileRoute("/_cards")({
 });
 
 function Index() {
+    const navigate = useNavigate();
+
     const [cards, setCards] = useState<ICard[]>([]);
     const [params, setParams] = useState<IParams>({
         skip: 0,
@@ -189,15 +191,7 @@ function Index() {
                                                 params={{ id: String(card.id) }}
                                                 className="space-y-1"
                                             >
-                                                <div className="w-full aspect-[2/2.8] relative overflow-hidden rounded">
-                                                    <ImageWithSkeleton
-                                                        name={card.name}
-                                                        src={card.media?.image_url ?? "no-src"}
-                                                        orientation={card.orientation ?? null}
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-
+                                                <CardImage card={card} className="w-full" />
                                                 <div className="flex gap-1 text-sm/4 px-1">
                                                     <div>
                                                         <p>{set}</p>
@@ -220,43 +214,49 @@ function Index() {
                                 )}
                             </div>
                         )}
-
-                        {/* Filter Panel */}
-                        <Modal
-                            backdrop="opaque"
-                            placement="bottom"
-                            isOpen={toggleFilter}
-                            onClose={() => setToggleFilter(false)}
-                        >
-                            <ModalContent>
-                                <ModalHeader>Filter search</ModalHeader>
-                                <ModalBody className="pb-8">
-                                    <CardFilters values={params} onSubmit={handleUpdateParams} />
-                                </ModalBody>
-                            </ModalContent>
-                        </Modal>
-
-                        {/* Sort Panel */}
-                        <Modal
-                            size="xs"
-                            backdrop="opaque"
-                            placement="bottom"
-                            isOpen={toggleSort}
-                            onClose={() => setToggleSort(false)}
-                        >
-                            <ModalContent>
-                                <ModalHeader>Sort cards</ModalHeader>
-                                <ModalBody className="pb-8">
-                                    <CardSort value={params} onChange={handleUpdateParams} />
-                                </ModalBody>
-                            </ModalContent>
-                        </Modal>
-
-                        {/* Detail: see /cards/$id page */}
-                        <Outlet />
                     </div>
                 </div>
             </InfiniteScroll>
+
+            {/* OCR button */}
+            <Button
+                type="button"
+                isIconOnly
+                size="lg"
+                className="fixed bottom-6 right-4 z-50"
+                onPress={() => void navigate({ to: "/ocr" })}
+            >
+                <i className="fa fa-plus" />
+            </Button>
+
+            {/* Filter Panel */}
+            <Modal backdrop="opaque" placement="bottom" isOpen={toggleFilter} onClose={() => setToggleFilter(false)}>
+                <ModalContent>
+                    <ModalHeader>Filter search</ModalHeader>
+                    <ModalBody className="pb-8">
+                        <CardFilters values={params} onSubmit={handleUpdateParams} />
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
+
+            {/* Sort Panel */}
+            <Modal
+                size="xs"
+                backdrop="opaque"
+                placement="bottom"
+                isOpen={toggleSort}
+                onClose={() => setToggleSort(false)}
+            >
+                <ModalContent>
+                    <ModalHeader>Sort cards</ModalHeader>
+                    <ModalBody className="pb-8">
+                        <CardSort value={params} onChange={handleUpdateParams} />
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
+
+            {/* Detail: see /cards/$id page */}
+            <Outlet />
         </div>
     );
 }
