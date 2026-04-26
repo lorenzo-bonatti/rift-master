@@ -5,12 +5,12 @@
     "type": "module",
     "scripts": {
         "dev": "bun --bun vite",
-        "build": "tsc -b && vite build",
+        "build": "bun run tsc -b && bun --run vite build",
         "preview": "vite preview",
         "lint": "biome lint .",
         "format": "biome format --write .",
         "check": "biome check --write .",
-        "cap:sync": "bun run build && bunx cap sync android",
+        "cap:sync": "bun run build && bun --bun cap sync android",
         "cap:copy": "bun run build && bunx cap copy android",
         "cap:open": "bunx cap open android"
     },
