@@ -10,7 +10,7 @@
         "@capacitor/android": "^8.2.0",
         "@capacitor/app": "^8.0.1",
         "@capacitor/core": "^8.2.0",
-        "@capacitor/file-transfer": "^2.0.4",
+        "@capacitor/filesystem": "^8.1.2",
         "@capawesome/capacitor-android-edge-to-edge-support": "^8.0.6",
         "@fortawesome/fontawesome-free": "^7.2.0",
         "@heroui/react": "^2.8.10",
@@ -122,7 +122,7 @@
 
     "@capacitor/core": ["@capacitor/core@8.2.0", "", { "dependencies": { "tslib": "^2.1.0" } }, "sha512-oKaoNeNtH2iIZMDFVrb1atoyRECDGHcfLMunJ5KWN8DtvpVBeeA4c41e20NTuhMxw1cSYbpq2PV2hb+/9CJxlQ=="],
 
-    "@capacitor/file-transfer": ["@capacitor/file-transfer@2.0.4", "", { "dependencies": { "@capacitor/synapse": "^1.0.4" }, "peerDependencies": { "@capacitor/core": ">=8.0.0" } }, "sha512-tWHcLmUu1SMfQY1KUHLXK63c6rsyrPHAgbWh4eIqyg4B8cyyzVJQC+/T6tLehv262iO7lw0S7ebb/DU9GlNL4A=="],
+    "@capacitor/filesystem": ["@capacitor/filesystem@8.1.2", "", { "dependencies": { "@capacitor/synapse": "^1.0.4" }, "peerDependencies": { "@capacitor/core": ">=8.0.0" } }, "sha512-doaaMfGoFR2hWU6aV6u83I+5ZsGyJVq+Gz4r9lMpJzUKMm1eMu0hLnFdV1aXZlU9FlK/RndFrVD8oRZfNOqWgQ=="],
 
     "@capacitor/synapse": ["@capacitor/synapse@1.0.4", "", {}, "sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw=="],
 

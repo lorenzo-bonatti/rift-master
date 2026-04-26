@@ -20,7 +20,7 @@
         "@capacitor/android": "^8.2.0",
         "@capacitor/app": "^8.0.1",
         "@capacitor/core": "^8.2.0",
-        "@capacitor/file-transfer": "^2.0.4",
+        "@capacitor/filesystem": "^8.1.2",
         "@capawesome/capacitor-android-edge-to-edge-support": "^8.0.6",
         "@fortawesome/fontawesome-free": "^7.2.0",
         "@heroui/react": "^2.8.10",
