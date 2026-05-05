@@ -1,18 +1,18 @@
+import { CardFilters } from "@components/card-filters";
+import { CardImage } from "@components/card-image";
+import { CardSort } from "@components/card-sort";
 import { Badge, Button, Input, Modal, ModalBody, ModalContent, ModalHeader, Spinner } from "@heroui/react";
+import { supabase } from "@integrations/supabase";
+import type { ICard } from "@models/card";
+import { EnumSort } from "@models/card-page";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
+import { getCardSetNumber, splitCardName } from "@utils/cards";
 import { useCallback, useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDebouncedCallback } from "use-debounce";
-import { CardFilters } from "../components/card-filters";
-import { CardImage } from "../components/card-image";
-import { CardSort } from "../components/card-sort";
-import { supabase } from "../integration/supabase";
-import type { ICard } from "../types/card";
-import { EnumSort } from "../types/card-page";
-import { getCardSetNumber, splitCardName } from "../utils/cards";
 
-const LIMIT = 50;
+const LIMIT = 100;
 
 interface IParams {
     skip: number;
@@ -28,11 +28,8 @@ interface IParams {
     enableSetSort: boolean;
 }
 
-export const Route = createFileRoute("/_cards")({
+export const Route = createFileRoute("/_menu/_cards")({
     component: Index,
-    beforeLoad: ({ context }) => {
-        if (!context.user) throw redirect({ to: "/login" });
-    },
 });
 
 function Index() {
@@ -189,10 +186,10 @@ function Index() {
                                         };
                                         return (
                                             <Link
-                                                to="/cards/$id"
                                                 key={card.id}
+                                                to="/cards/$id"
                                                 params={{ id: String(card.id) }}
-                                                className="space-y-1"
+                                                className="text-left space-y-1"
                                             >
                                                 <CardImage card={card} className="w-full" />
                                                 <div className="flex gap-1 text-sm/4 px-1">
@@ -224,12 +221,14 @@ function Index() {
             {/* OCR button */}
             <Button
                 type="button"
-                isIconOnly
+                // isIconOnly
                 size="lg"
-                className="fixed bottom-6 right-4 z-50"
+                color="primary"
+                radius="full"
+                className="fixed bottom-24 right-4 h-12 z-50"
                 onPress={() => void navigate({ to: "/ocr" })}
             >
-                <i className="fa fa-plus" />
+                Scan card <i className="fa fa-expand" />
             </Button>
 
             {/* Filter Panel */}
@@ -243,13 +242,7 @@ function Index() {
             </Modal>
 
             {/* Sort Panel */}
-            <Modal
-                size="xs"
-                backdrop="opaque"
-                placement="bottom"
-                isOpen={toggleSort}
-                onClose={() => setToggleSort(false)}
-            >
+            <Modal backdrop="opaque" placement="bottom" isOpen={toggleSort} onClose={() => setToggleSort(false)}>
                 <ModalContent>
                     <ModalHeader>Sort cards</ModalHeader>
                     <ModalBody className="pb-8">

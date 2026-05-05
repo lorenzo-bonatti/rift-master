@@ -1,7 +1,7 @@
 import { Button, Card, CardBody } from "@heroui/react";
+import type { IPrice } from "@models/price";
 import { useState } from "react";
 import { useSettingsStore } from "../../stores";
-import type { IPrice } from "../../types/price";
 import { LanguageSelectorModal } from "../language-selector";
 
 interface IProps {

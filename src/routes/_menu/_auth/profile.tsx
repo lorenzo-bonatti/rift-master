@@ -1,9 +1,9 @@
 import { Button, Divider, Input } from "@heroui/react";
+import { supabase } from "@integrations/supabase";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
-import { supabase } from "../integration/supabase";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/_menu/_auth/profile")({
     component: ProfilePage,
     beforeLoad: ({ context }) => {
         if (!context.user) throw redirect({ to: "/login" });
@@ -80,9 +80,7 @@ function ProfilePage() {
             <div className="page-content space-y-6 py-4">
                 {/* Personal info */}
                 <section className="space-y-3">
-                    <h2 className="text-sm font-semibold text-default-500 uppercase tracking-wide">
-                        Personal info
-                    </h2>
+                    <h2 className="text-sm font-semibold text-default-500 uppercase tracking-wide">Personal info</h2>
                     <Input label="First name" value={firstName} onValueChange={setFirstName} />
                     <Input label="Last name" value={lastName} onValueChange={setLastName} />
                     {infoMsg && (
@@ -131,9 +129,7 @@ function ProfilePage() {
                         onValueChange={setConfirmPassword}
                     />
                     {passwordMsg && (
-                        <p
-                            className={`text-sm ${passwordMsg.includes("updated") ? "text-success" : "text-danger"}`}
-                        >
+                        <p className={`text-sm ${passwordMsg.includes("updated") ? "text-success" : "text-danger"}`}>
                             {passwordMsg}
                         </p>
                     )}

@@ -6,7 +6,8 @@ import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, Outlet, useRouter } from "@tanstack/react-router";
 import { useEffect, useTransition } from "react";
 import { BottomNav } from "../components/bottom-nav";
-import { supabase } from "../integration/supabase";
+import { LoadingMessageProvider } from "../components/loading-message/loading-message-provider";
+import { supabase } from "../integrations/supabase";
 
 export interface RouterContext {
     queryClient: QueryClient;
@@ -54,16 +55,18 @@ function RootLayout() {
 
     return (
         <HeroUIProvider>
-            {isPending ? (
-                <div className="grid place-content-center w-screen h-screen">
-                    <Spinner label="Loading" variant="wave" />
-                </div>
-            ) : (
-                <>
-                    <Outlet />
-                    {user && <BottomNav />}
-                </>
-            )}
+            <LoadingMessageProvider>
+                {isPending ? (
+                    <div className="grid place-content-center w-screen h-screen">
+                        <Spinner label="Loading" variant="wave" />
+                    </div>
+                ) : (
+                    <>
+                        <Outlet />
+                        {user && <BottomNav />}
+                    </>
+                )}
+            </LoadingMessageProvider>
         </HeroUIProvider>
     );
 }

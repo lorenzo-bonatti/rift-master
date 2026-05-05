@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, Input, Spinner } from "@heroui/react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { supabase } from "../integration/supabase";
+import { supabase } from "../integrations/supabase";
 
 export const Route = createFileRoute("/reset-password")({
     component: ResetPasswordPage,

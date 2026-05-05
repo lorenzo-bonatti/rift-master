@@ -1,5 +1,5 @@
 import { Chip, Switch } from "@heroui/react";
-import { EnumSort } from "../../types/card-page";
+import { EnumSort } from "@models/card-page";
 
 interface IValue {
     sort: EnumSort;

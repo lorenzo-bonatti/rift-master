@@ -10,22 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OcrRouteImport } from './routes/ocr'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
-import { Route as CardsRouteImport } from './routes/_cards'
-import { Route as CardsIndexRouteImport } from './routes/_cards/index'
-import { Route as CardsCardsIdRouteImport } from './routes/_cards/cards.$id'
+import { Route as MenuRouteImport } from './routes/_menu'
+import { Route as MenuCardsRouteImport } from './routes/_menu/_cards'
+import { Route as MenuAuthRouteImport } from './routes/_menu/_auth'
+import { Route as MenuCardsIndexRouteImport } from './routes/_menu/_cards/index'
+import { Route as MenuAuthProfileRouteImport } from './routes/_menu/_auth/profile'
+import { Route as MenuCardsCardsIdRouteImport } from './routes/_menu/_cards/cards.$id'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OcrRoute = OcrRouteImport.update({
@@ -43,49 +40,64 @@ const LibraryRoute = LibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CardsRoute = CardsRouteImport.update({
-  id: '/_cards',
+const MenuRoute = MenuRouteImport.update({
+  id: '/_menu',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CardsIndexRoute = CardsIndexRouteImport.update({
+const MenuCardsRoute = MenuCardsRouteImport.update({
+  id: '/_cards',
+  getParentRoute: () => MenuRoute,
+} as any)
+const MenuAuthRoute = MenuAuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => MenuRoute,
+} as any)
+const MenuCardsIndexRoute = MenuCardsIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => CardsRoute,
+  getParentRoute: () => MenuCardsRoute,
 } as any)
-const CardsCardsIdRoute = CardsCardsIdRouteImport.update({
+const MenuAuthProfileRoute = MenuAuthProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => MenuAuthRoute,
+} as any)
+const MenuCardsCardsIdRoute = MenuCardsCardsIdRouteImport.update({
   id: '/cards/$id',
   path: '/cards/$id',
-  getParentRoute: () => CardsRoute,
+  getParentRoute: () => MenuCardsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof CardsIndexRoute
+  '/': typeof MenuCardsIndexRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/ocr': typeof OcrRoute
-  '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/cards/$id': typeof CardsCardsIdRoute
+  '/profile': typeof MenuAuthProfileRoute
+  '/cards/$id': typeof MenuCardsCardsIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof MenuCardsIndexRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/ocr': typeof OcrRoute
-  '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/': typeof CardsIndexRoute
-  '/cards/$id': typeof CardsCardsIdRoute
+  '/profile': typeof MenuAuthProfileRoute
+  '/cards/$id': typeof MenuCardsCardsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_cards': typeof CardsRouteWithChildren
+  '/_menu': typeof MenuRouteWithChildren
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/ocr': typeof OcrRoute
-  '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_cards/': typeof CardsIndexRoute
-  '/_cards/cards/$id': typeof CardsCardsIdRoute
+  '/_menu/_auth': typeof MenuAuthRouteWithChildren
+  '/_menu/_cards': typeof MenuCardsRouteWithChildren
+  '/_menu/_auth/profile': typeof MenuAuthProfileRoute
+  '/_menu/_cards/': typeof MenuCardsIndexRoute
+  '/_menu/_cards/cards/$id': typeof MenuCardsCardsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -94,36 +106,37 @@ export interface FileRouteTypes {
     | '/library'
     | '/login'
     | '/ocr'
-    | '/profile'
     | '/reset-password'
+    | '/profile'
     | '/cards/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/library'
     | '/login'
     | '/ocr'
-    | '/profile'
     | '/reset-password'
-    | '/'
+    | '/profile'
     | '/cards/$id'
   id:
     | '__root__'
-    | '/_cards'
+    | '/_menu'
     | '/library'
     | '/login'
     | '/ocr'
-    | '/profile'
     | '/reset-password'
-    | '/_cards/'
-    | '/_cards/cards/$id'
+    | '/_menu/_auth'
+    | '/_menu/_cards'
+    | '/_menu/_auth/profile'
+    | '/_menu/_cards/'
+    | '/_menu/_cards/cards/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  CardsRoute: typeof CardsRouteWithChildren
+  MenuRoute: typeof MenuRouteWithChildren
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   OcrRoute: typeof OcrRoute
-  ProfileRoute: typeof ProfileRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
@@ -134,13 +147,6 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ocr': {
@@ -164,48 +170,94 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_cards': {
-      id: '/_cards'
+    '/_menu': {
+      id: '/_menu'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof CardsRouteImport
+      preLoaderRoute: typeof MenuRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_cards/': {
-      id: '/_cards/'
+    '/_menu/_cards': {
+      id: '/_menu/_cards'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MenuCardsRouteImport
+      parentRoute: typeof MenuRoute
+    }
+    '/_menu/_auth': {
+      id: '/_menu/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MenuAuthRouteImport
+      parentRoute: typeof MenuRoute
+    }
+    '/_menu/_cards/': {
+      id: '/_menu/_cards/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof CardsIndexRouteImport
-      parentRoute: typeof CardsRoute
+      preLoaderRoute: typeof MenuCardsIndexRouteImport
+      parentRoute: typeof MenuCardsRoute
     }
-    '/_cards/cards/$id': {
-      id: '/_cards/cards/$id'
+    '/_menu/_auth/profile': {
+      id: '/_menu/_auth/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof MenuAuthProfileRouteImport
+      parentRoute: typeof MenuAuthRoute
+    }
+    '/_menu/_cards/cards/$id': {
+      id: '/_menu/_cards/cards/$id'
       path: '/cards/$id'
       fullPath: '/cards/$id'
-      preLoaderRoute: typeof CardsCardsIdRouteImport
-      parentRoute: typeof CardsRoute
+      preLoaderRoute: typeof MenuCardsCardsIdRouteImport
+      parentRoute: typeof MenuCardsRoute
     }
   }
 }
 
-interface CardsRouteChildren {
-  CardsIndexRoute: typeof CardsIndexRoute
-  CardsCardsIdRoute: typeof CardsCardsIdRoute
+interface MenuAuthRouteChildren {
+  MenuAuthProfileRoute: typeof MenuAuthProfileRoute
 }
 
-const CardsRouteChildren: CardsRouteChildren = {
-  CardsIndexRoute: CardsIndexRoute,
-  CardsCardsIdRoute: CardsCardsIdRoute,
+const MenuAuthRouteChildren: MenuAuthRouteChildren = {
+  MenuAuthProfileRoute: MenuAuthProfileRoute,
 }
 
-const CardsRouteWithChildren = CardsRoute._addFileChildren(CardsRouteChildren)
+const MenuAuthRouteWithChildren = MenuAuthRoute._addFileChildren(
+  MenuAuthRouteChildren,
+)
+
+interface MenuCardsRouteChildren {
+  MenuCardsIndexRoute: typeof MenuCardsIndexRoute
+  MenuCardsCardsIdRoute: typeof MenuCardsCardsIdRoute
+}
+
+const MenuCardsRouteChildren: MenuCardsRouteChildren = {
+  MenuCardsIndexRoute: MenuCardsIndexRoute,
+  MenuCardsCardsIdRoute: MenuCardsCardsIdRoute,
+}
+
+const MenuCardsRouteWithChildren = MenuCardsRoute._addFileChildren(
+  MenuCardsRouteChildren,
+)
+
+interface MenuRouteChildren {
+  MenuAuthRoute: typeof MenuAuthRouteWithChildren
+  MenuCardsRoute: typeof MenuCardsRouteWithChildren
+}
+
+const MenuRouteChildren: MenuRouteChildren = {
+  MenuAuthRoute: MenuAuthRouteWithChildren,
+  MenuCardsRoute: MenuCardsRouteWithChildren,
+}
+
+const MenuRouteWithChildren = MenuRoute._addFileChildren(MenuRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  CardsRoute: CardsRouteWithChildren,
+  MenuRoute: MenuRouteWithChildren,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   OcrRoute: OcrRoute,
-  ProfileRoute: ProfileRoute,
   ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport

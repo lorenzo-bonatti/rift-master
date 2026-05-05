@@ -11,7 +11,7 @@
 import { Button, Chip } from "@heroui/react";
 import { useForm } from "@tanstack/react-form";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "../../integration/supabase";
+import { supabase } from "../../integrations/supabase";
 
 interface IValue {
     domains: number[];
@@ -28,7 +28,8 @@ interface IProps {
 export const CardFilters = ({ values, onSubmit }: IProps) => {
     const { data: sets } = useQuery({
         queryKey: ["sets"],
-        queryFn: async () => await supabase.from("set").select("id, label, order").order("order", { ascending: true }),
+        queryFn: async () =>
+            await supabase.from("set").select("id, riftbound_id, label, order").order("order", { ascending: true }),
         select: (res) => res.data ?? [],
     });
 

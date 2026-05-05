@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, Input, Tab, Tabs } from "@heroui/react";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
-import { supabase } from "../integration/supabase";
+import { supabase } from "../integrations/supabase";
 
 export const Route = createFileRoute("/login")({
     component: LoginPage,
